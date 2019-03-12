@@ -1,0 +1,2 @@
+csvfix.o: ./tools/csvfix.c ./include/csv.h
+	gcc  -lcsv -c ./tools/csvfix.c -o csvfix.o

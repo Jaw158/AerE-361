@@ -1,0 +1,2 @@
+libintegration.so: integration.c integration.h
+	gcc -shared -c integration.c integration.h -o libintegration.so

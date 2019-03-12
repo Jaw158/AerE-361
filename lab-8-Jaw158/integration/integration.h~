@@ -1,0 +1,9 @@
+#include <stdio.h>
+
+double midpoint(double (*f)(double),double,double);
+
+double simpson_13(double (*f)(double),double,double);
+
+double simpson_38(double (*f)(double),double,double);
+
+double gauss_quad(double (*f)(double),double,double,int);
