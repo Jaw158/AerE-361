@@ -1,0 +1,54 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\begin{document}
+
+\newcommand\tab[1][1cm]{\hspace{#1}}
+
+\section{Problem}
+In this lab we are attempting to make a spiral of numbers. The output must be a square matrix, with the number 1 starting at or near the center. Each subsequent integer will circle around the 1 in an outward spiral.
+
+\section{Design}
+The first part of this code is input sanitization, ensuring an integer between 1 and 100 is inputted. This is taken from the codes in lab 4.
+
+The second part of the code stores the appropriate entries in the loop. As part of this the size of the array is established dynamically using pointers. Various indexing values (either for element value or array location) are also defined. The elements are then stored in the matrix. After element 1 a loop is employed; moving each subsequent element along in an outward spiral. First the elements are stored horizontally to the right, when possible (above an empty matrix element) the elements begin being stored downwards. When an element to the left becomes open the movement direction is reversed. Now the elements are stored leftwards followed by upwards (when possible) until an element to the right becomes open at which point the movement direction is switched back. This continues until all elements are stored in the array.
+
+The final part of the code outputs the array to the screen. First the number of spaces needed for proper output is found. The necessary amount of space for each element is the length of the largest element (i.e. the input squared). When the spaces required is found a loop is employed. This loop is more standard, outputting the elements along an entire row, one row at a time. When the entire matrix has been printed this way the code ends.
+
+\section{Loop Invariants}
+For a given input the loop invariants in any section of the code are the variables n, n2, and k. The input is stored as n, n2 is the square of the input, and k is the number and type of characters the input contains. Note that these values will change depending on what number the user inputs, but they are constant throughout all loops in the code. Every other variable is used to either indicate how many loops have passed, where in the array the code is currently located, or determine the spaces allocated to the output elements.
+
+\section{Complexity}
+The time complexity is found based on how many times a loop has to be ran. This code has to go through each element of the matrix and the size of the matrix is the square of the input. Therefore this code has complexity $O(n^2)$.
+
+\section{Discussion}
+The main thing I learned in this lab was how to manipulate arrays in C++. The method is similar to other coding languages with the main difference being sizing a matrix. Fortunately the lab manual covered how to size an array dynamically quite well. Outputting the array required some work, but was not difficult. Running two loops to display a matrix seemed inefficient, but was otherwise straightforward.
+
+Storing data in the matrix was not inherently hard once the algorithm was figured out. However, ensuring that the storage loop would end after storing the last element was a challenge. I worked it out with a few \textit{if} statements, but if I could I would have liked to make the entire storage loop a separate function. Unfortunately I did not figure out how to enter and then return a matrix from a function. I feel this would have made my code cleaner, as it would need fewer \textit{if} statements and could exit with \textit{return} instead of two uses of \textit{break}.
+
+Figuring out the algorithm to store the elements in the array was surprisingly not the hardest part of this code. It was a challenge, but I had an idea of how to solve it pretty quickly. I figured out a mathematical way to move around the spiral, avoiding the necessity of using \textit{if} statements to check for an empty element. As part of this I gained appreciation for writing out pseudo code first before actually coding. While I had the general idea of how the algorithm should work I did not write any of it down, preferring to just start coding so I could see how it works. This worked well initially, but as I ran into bugs storing the data my attempts to fix the code led to an ugly series of \textit{if} statements. Eventually I was able to streamline the \textit{if}s, but writing down the process first would have saved time. Additionally while I was able to figure it out here, there is no guarantee I will be able to successfully troubleshoot a more complex code in the future.
+
+I also learned some other tricks that I can apply to future codes. One I found was that running
+\newline
+
+size \= = 0;
+
+while(number) \{
+
+\tab number = number/10;
+
+\tab ++size;
+
+\}
+\newline
+
+will determine the size of the number. Additionally $\ast$ has many uses as a placeholder value in C++. As mentioned in the lab manual it can be used as a pointer to adjust the size of an array dynamically. It can also be sued to adjust the spacing on outputs. It used in \textit{printf}
+\newline
+
+printf("\%\textbf{*}d",size,number);
+\newline
+
+where the \textit{size} variable determines how many spaces to allocate to the \textit{number} variable that is printed to the screen. This allows for dynamic output spacing. These little bits of code should prove useful in future projects.
+
+\end{document}
