@@ -1,0 +1,7 @@
+#include <stdio.h>
+int main(void) {
+  float a = 1.0; unsigned int b = 10;
+  unsigned int div = a/b
+    printf("Result: %d\n", div);
+  return 0;
+}

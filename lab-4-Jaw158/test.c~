@@ -1,0 +1,16 @@
+#include <stdio.h>
+#include <ctype.h>
+int n, i;
+main () {
+  n = 0;
+  while ((i = getchar()) != EOF) {
+    ++n;
+    if (i == 10) {
+      printf("%d\n",n);
+      break;
+    }
+  }
+  for (i = 0; i < n-1; ++i) {
+    printf("y\n");
+  }
+}

@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Integer Types}
+\begin{enumerate}
+    \item int
+    \item char
+    \item char
+    \item long
+    \item none
+    \item char
+\end{enumerate}
+
+\section{Float Types}
+\begin{enumerate}
+    \item float
+    \item double
+    \item float
+\end{enumerate}
+The "E" in the third number stands for \textit{*10\textasciicircum}, indicating that the number before "E" should be increased by the number after "E" orders of magnitude
+
+\section{Type Selection}
+the maximum possible value is \ 2*100 = 200 \ the sum can most efficiently be stored as date type unsigned char
+
+\section{Type Errors}
+\begin{enumerate}
+    \item The compiler reports an error because there is not a semi-colon after \textit{unsigned char sum = a + b}. After fixing that the compiler does not report any more errors, however the sum of these numbers is not the actual sum. The variable \textit{sum} is not large enough to store the actual result of the addition, so the computer rolls over the number to give "178" instead of the actual "690". This problem can be fixed by saving \textit{sum} as an unsigned integer.
+    \item The compiler reports an error because there is not a semi-colon after \textit{unsigned int div = a/b}. After fixing this problem the compiler does not report any more errors, however the quotient of these numbers is again incorrect. One way to correct this is to change \textit{div} from type \textbf{unsigned int} to type \textbf{float} and replacing the \textit{\%d} in \textit{printf} with \textit{\%f}. This outputs the data as a decimal (float).
+    \item The compiler does not report an issues. However, the program outputs \textit{3.60000000000000008882} instead of \textit{3.6}. This can be fixed by replacing \textit{\%0.20f} in \textit{printf} with \textit{\%0.1f}. This will only output one decimal place, giving us the expected answer "3.6".
+\end{enumerate}
+
+\section{Big-O}
+The complexity of finding the number 500 in this array is O(n). This is based on the worst case scenario where the number 500 only exists in the last element of the array. In such a case the code would need to check the array \textit{n} times (corresponding to each element), which is linear complexity.
+
+\section{Adding}
+\subsection{Brute Force}
+This code adds up the numbers from 1 to n using a loop. The code will add 1 to s, then it will add 2, and so on up to the number n. This is based on the following equation 
+\begin{equation}
+    \sum_{s=1}^{n} i
+\end{equation}
+Once the function has finished adding all n numbers it will output the final value of s. This is the sum of all the numbers from 1 to n.
+
+Since the number of times the code loops is dependent on the size of the input provided this has a linear complexity, O(n).
+
+\subsection{Gauss}
+This code adds the number from 1 to n using multiplication. The code takes advantage of the Gaussian method as follows
+\begin{equation}
+    \frac{n(n+1)}{2}
+\end{equation}
+The function will multiply the integer n with the integer immediately following it and divide the product by two. The result is the sum of the numbers from 1 to n.
+
+Since this code only loops once, irregardless of the size of the inputs, it has a constant complexity, O(1). 
+
+\subsection{Performance}
+The performance of the Gaussian method is much faster than simple brute force. Using the \textit{time} command \textit{BruteForceAdder} takes about 7.4 seconds to give an answer, \textit{GaussAdder} needs less than a thousandth of a second. This is an absurd difference in time and, even though it was under 8 seconds, it felt like \textit{BruteForceAdder} took a long time to finish. Implementing a clever algorithm is thus very important if you want your code to end in a reasonable time frame.
+
+\section{commands}
+\begin{enumerate}
+    \item \textit{\textbackslash textasciicircum} creates a \textbf{\textasciicircum} in LaTeX
+    \item \textit{\$} will remove the functionality of LaTeX commands
+    \item \textit{emacs} is a fancier text editor, allows for color formatting and other handy things
+    \item \textit{\&} will return control to the command line used in Linux after a command; useful if you want to check a code as you write it
+    \item \textit{time} will determine the length of time it takes to run a program
+    \begin{itemize}
+        \item \textbf{real} is the time from when the program is called until it is completed, including time of human input
+        \item \textbf{user} is the length of time it takes the program to run not including human input
+    \end{itemize}
+    \item \textit{gcc \textbf{code}} compiles C++ code in Linux
+    \item \textit{a.out} is the default name of a compiled code
+    \begin{itemize}
+        \item can specify a different name by adding the file name at the end of \textit{gcc \textbf{code}}
+        \item \textit{./} preceeds \textit{a.out} to specify the folder where the program is
+    \end{itemize}
+    \item \textit{#include $<$\textbf{library}$>$} will add certain libraries of programs to your C++ code
+    \item \textit{main()} indicates the starting point of the code
+    \begin{itemize}
+        \item arguments can be added inside the parentheses allowing for input
+        \item functions can be created by specifying the name of the function and writing its effects before the main portion of the code
+    \end{itemize}
+    \item \textit{\{} and \textit{\}} start and end blocks of code, used with loops and if-else statements
+    \item \textit{scanf("\textbf{text} \%\textbf{type}", \textbf{variable})} is used to ask the user for inputs
+    \begin{itemize}
+        \item \textit{\textbf{text}} is descriptive text so the user knows what is going on
+        \item \textit{\textbf{type}} specifies what format type the input will be stored as, this should match the format of the variable
+        \item \textit{\textbf{variable}} indicates which variable the input should be stored in
+    \end{itemize}
+    \item \textit{return} ends the program, often a number is given along with it to specify if an error occurred and if so what type of error
+    \item \textit{break} will the innermost loop it is inside
+    \item \textit{//} adds comments in C++
+    \item \textit{getchar()} will check through each character of an already specified input
+    \begin{itemize}
+        \item \textbf{10} is the number that indicates the end of file (EOF)
+    \end{itemize}
+    
+\end{enumerate}
+
+\section{realizations}
+If the numbers are small enough they can be stored as data type char. the computer distinguishes between characters and numbers based on the input and output arguments.
+
+Semicolons are incredibly important in C++. Unless the function starts a process a (like \textit{for} or \textit{if}) it needs to end in a semicolon.
+
+\textit{getchar} and \textit{scanf} can work at odds with each other. If inputting multiple numbers (such as in a loop) and you need to use \textit{getchar} anyways it is probably best to not use \textit{scanf} and just input the numbers through \textit{getchar}. If you need to store the input for several later uses \textit{scanf} is the way to go.
+
+When using a \textit{while} loop you do not have to specify the end conditions in the argument of \textit{while}. Instead you can use \textit{if-else} statements to provide an end condition. To invoke this set the argument of \textit{while} as \textbf{1}.
+
+using \textbf{\%.0} right before the type specifier in \textit{printf} will output a float without the decimal.
+
+You need to specify the type of all of your variables in C++ before using any of them. You can change the specification later in the code; this is useful if you want to do math with floating point numbers and integers.
+
+\end{document}

@@ -1,0 +1,24 @@
+#include <stdio.h>
+
+void BruteForceAdder
+
+main() {
+  int c;
+  printf("Please enter an integer: ");
+  c = getchar(); //both requests input and checks each character
+  while(1) { //run loop until the file ends
+    if(isdigit(c)) {
+      c = getchar(); //uses existing value for c after first time
+    }
+    else if(c == 10) { //10 is the indicator for EOF
+      printf("That is an integer \n");
+      return 0;
+      break; //stop loop
+    }
+    else {
+      printf("ERROR: NOT AN INTEGER \n");
+      return 1; //error code
+      break;
+    }
+  }
+}
