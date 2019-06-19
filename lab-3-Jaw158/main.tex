@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\begin{document}
+
+\section{commands}
+\begin{enumerate}
+    
+    \item \textit{wc} provides a line, word, and byte count for all files in a directory
+    \item \textit{sed} acts as a find and replace command for linux
+    \begin{itemize}
+        \item \textit{s/\textbf{old text}/\textbf{new text}/} will replace the first instance of old text per line with the new text
+        \item add \textit{g} after the last frontslash to replace all instances of \textbf{old text}
+    \end{itemize}
+    \item \textit{NR} used inside \textit{awk} will add number lines to the output
+    \begin{itemize}
+        \item for example \textit{awk '\{print NR, \$1\}'} would print column one and add number lines in front of it
+    \end{itemize}
+    \item \textit{\textbackslash textit} is used to italicize text in LaTeX
+    \item \textit{\textbackslash textbf} is used to bold text in LaTeX
+    \item \textit{\textbackslash begin\{itemize\}} with the associated \textit{\textbackslash end\{itemize\}} allows for nested lists in LaTeX
+    \begin{itemize}
+        \item \textit{\textbackslash item} is used to make a bullet in the nested list
+    \end{itemize}
+    \item \textit{\textbackslash} will escape commands in LaTeX, displaying the literal symbol rather than using its function
+    \item \textit{\textbackslash textbackslash} is how you write a literal backslash in LaTeX
+    \begin{itemize}
+        \item using two backslashes simply makes a new line
+    \end{itemize}
+    
+\end{enumerate}
+
+\section{realizations}
+While it may not be the most efficient, sometimes the simplest way to do something is to write the output of a command to a new file and then have a second command act on that new file. This, for example, can be used to replace commas with spaces which in turn will allow \textit{awk} to output specific columns of the original file.
+
+You cannot read data from a file, modify it, and then save it back to that same file. More likely than not Linux will not give the output you want here. As such if you use the sequential command writing mentioned in the previous paragraph save the data to different files each time, this ensures Linux will execute things in the order desired.
+
+In exercise 8 \textit{sed} would act on sets of two commas. So if you have \textbf{text,,,,text} and wanted to add the word \textbf{empty} between the commas \textit{sed} would add \textbf{empty} between the commas 1 and 2 as well as 3 and 4, but not between commas 2 and 3. A way to get around this is simply to run the \textit{sed} command again (as above save it to a different file each time).
+
+\end{document}

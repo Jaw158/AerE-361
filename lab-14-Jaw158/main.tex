@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+
+\begin{document}
+
+\section{RK45}
+The trickiest part of this code was working out the RK45 section so it would approximate the two second order differential equations. Two coupled second order differential equations results in the following four coupled first order differential equations.
+\begin{equation}
+    \Dot{v}_x = -\frac{(1-\mu)(x-\mu)}{\sqrt{(x-\mu)^2+y^2}^3} - \frac{\mu(x+1-\mu)}{\sqrt{(x+1-\mu)^2+y^2}^3} + 2v_y+x
+\end{equation}
+\begin{equation}
+    \Dot{v}_y = -\frac{(1-\mu)y}{\sqrt{(x-\mu)^2+y^2}^3} - \frac{\mu*y}{\sqrt{(x+1-\mu)^2+y^2}^3} + 2v_x+y
+\end{equation}
+\begin{equation}
+    \Dot{x} = v_x
+\end{equation}
+\begin{equation}
+    \Dot{y} = v_y
+\end{equation}
+Unfortunately the RK45 examples provided in the lab document are for single, uncoupled differential equations. To get around this I found four values of K1, one for each differential equation. I then found the set of K2s by modifying x, y, $v_x$, and $v_y$ with the appropriate K1 value. I continued this process up to K6 as well as for finding each $s_{i+1}$ and $\hat{s}_{i+1}$ value. This provided a solution of the four coupled differential equations.
+
+In solving each of four single order differential equations for values of R will result. Since these are used to check the error of the solutions I only care about the largest R. After picking out the largest R I calculate $\delta$ and use that to find the new step size. I then check if R is smaller than the error, $\epsilon$. If it is I print the x and y positions to a text file and start the RK45 over again with new values of x, y, $v_x$, and $v_y$ to find the next x and y positions. If R is larger than $\epsilon$ I calculate corrected values of x, y, $v_x$, and $v_y$ using a more accurate step size. When the spacecraft reaches the proximity of the moon or a certain number of iterations occurs (corresponding to a non-converging trajectory; I allowed for 100 steps) the RK45 is stopped.
+
+\section{gnuplot}
+Two different gnuplots are used. One to print the rough trajectory to the terminal, the other to create a high-quality png file. For each plot I set a title, the x and y ranges, the two circles corresponding to the Moon and Earth, and plotted the trajectory. The x range is set from -400,000 to 50,000 kilometers. The y range goes from -50,000 to 50,000 kilometers. This is enough space to allow for the positions of the Moon, Earth, and starting spot of the spacecraft. Since the spacecraft should be going towards the Moon this should be enough space to allow for the entire spacecraft trajectory as well. The two circles corresponding to the Moon and Earth are created as objects. The centers are located on the y-axis and at the x positions described in the lab document. The radii of the circles correspond to the actual radii of the Moon and Earth, which I looked up ($R_{Earth}$ = 6371 km, $R_{Moon}$ = 1737 km). After all of this I plot the trajectory of the spacecraft using the text file created during the RK45 solution. These are all of the similarities between the rough gnuplot and the final gnuplot.
+
+For the rough trajectory gnuplot I set it so the figure will output to the terminal with ascii characters. I then call this gnuplot file using \textit{system} just before the code asks if the user is happy with the current spacecraft trajectory. The user thus uses the "dumb" terminal graph to make decide if they want to readjust the $\Delta$V. I request the user to enter 'y' if they are happy with the trajectory, thus allowing the code to continue on. If the user is not happy they are asked to enter 'n', causing the RK45 to be done over again with a new $\Delta$V. I use \textit{strcmp} to check the response, like in the password exercise of lab 6.
+
+For the final trajectory I set it to output a png file. I changed the size to 4500 pixels by 1000 pixels. This maintained the appropriate aspect ratio according to the x and y ranges, while also being high-quality. I also created labels for the x-axis and y-axis. This gnuplot is run with \textit{system} if the user selects is happy with the trajectory (selects 'y'). At this point in the code the program also prints the maximum step size, minimum step size, and number of RK45 iterations to the terminal.
+
+The only other parts of this code are the two differential equations (equations 1 and 2) which are each written as a function, user input, and error checking. Each of these are either based on or directly taken from earlier codes I have written. As such I do not feel the need to comment on them, other than to acknowledge their existence.
+
+\section{Loop Invariants and Runtime}
+This code has, in total, three loops. The first loop is over the entire trajectory solution; it is used to determine if the user is happy with the resulting spacecraft path. The loop ends when the user is happy. The only two loop invariants are the gravitational parameter, $\mu$, and the allowable step size error, $\epsilon$. The second loop is over the RK45 section. This loop runs until the spacecraft reaches the vicinity of the moon or for a set number of iterations (I set it to 100). The loop invariants here are again $\mu$ and $\epsilon$. The final loop ensures that the user says whether or not they are happy. The loop only ends when the user indicates they are happy with the trajectory (entering 'y') or they are unhappy (entering 'n'). Of the variables involved, none of them are constant in this loop.
+
+There are only two times the user can interact with the code. entering a $\Delta$V or deciding if they are happy with the trajectory. The $\Delta$V doesn't affect runtime, since it only modifies the value of a variable, rather than deciding how many values are processed. The user deciding if they are unhappy does affect the runtime. Each time the user is unhappy nearly the entire code is run again. As such there is a linear relationship between user inputs and runtime. This gives a time complexity of $O(n)$.
+
+\end{document}

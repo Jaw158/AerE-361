@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+
+\begin{document}
+
+\section{Buffer Overflow}
+The password \textsc{cyc1nenat10n} displays the root access welcome message. The password \textsc{hawk3y35} displays the wrong password message and does not give root access. The code has \textsc{cyc1nenat10n} stored as the correct password, so if \textsc{cyc1nei0wa} is the actual correct password that should be changed in the code. The password \textsc{thi5pa55w0rdw1llg3tm3r00tacc355} displays the wrong password, but still provides root access.
+
+\begin{enumerate}
+    \item Any passwords of 29 characters or longer will provide root access. The reason for this is due to an overflow error. When an input of more than double the length of the allowed variable size is entered the \textit{if} statement behaves oddly. It checks the first 28 characters and rejects them if they do not match the prescribed password. The 29th and further characters, however, are not checked by the \textit{if} and instead fall into \textit{else} category. Since reaching \textit{else} provides root access the hacker is allowed in.
+    \item First I would change the "correct" stored password to the actual correct one. I would also change the if statement so the \textit{if} responds to a correct result and the \textit{else} responds to an incorrect result. This changes the code from seeking a failure in all cases, which is generally a bad idea, to looking for a success. This may not be necessary, but it should filter out unexpected inputs that might otherwise get around it. This does not fix the main problem of overflowing input length, however. For that I would add a check of the string length. If the string is more than 14 characters I would reject it outright.
+    \item I fixed the code by changing the stored password from \textsc{cyc1nenat10n} to \textsc{cyc1nei0wa}. To solve the overflow issue I added \textit{strlen} to check the length of the string and stored the result in the variable \textit{len}. I then added an \textit{else if} statement to check if \textit{len} was greater then 15. If it was longer I acknowledged the cleverness of the hacker and then ended the program.
+\end{enumerate}
+
+\section{Maclaurin Series}
+The goal for this code is to evaluate the exponential function using its Maclaurin series as follows
+
+\begin{equation}
+    e^x = \sum_{n = 0}^{\infty} \frac{x^n}{n!}
+\end{equation}
+
+The Maclaurin series, by its nature, has to be evaluated with a loop. Since I did not know how many times the code would have to run it would be a while loop. The loop would end when the error of the series is less than the convergence criteria. Initially I wanted to calculate the error using the error function associated with the Maclaurin series, of the form
+
+\begin{equation}
+    error = \frac{e}{(n+1)!}
+\end{equation}
+
+However using this error function was proving difficult. As such I reverted to the more common method of calculating the difference between the current and the previous value. The difference between these values is just the latest value of the Maclaurin series. As such the error was calculated as
+
+\begin{equation}
+    error = \frac{x^n}{n!}
+\end{equation}
+
+Using this method of finding the error worked any time the convergence criteria was less than one. While this is certainly the standard case, a convergence criteria above 1 should be allowed. This created a complication in the code. Maclaurin series works such that for any x value above 1 the series builds up until n exceeds the value of x. At this point subsequent values of the Maclaurin series become increasingly small. Since the Maclaurin series starts at 1 and gets bigger any convergence criteria above 1 tricked the code into thinking that convergence has been reached far before it actually had been. To correct this mistake I added an \textit{if} statement to force the Maclaurin loop to run until the Maclaurin series values start getting smaller (i.e. n is greater than x) for convergence criteria above 1. Occasionally this causes the loop to run longer than it needs to, but all results are within the acceptable error.
+
+I recognized that I would have to write a function to calculate the factorial, since C++ cannot do that automatically. I based the factorial function off of the one we worked with earlier in the lab.
+
+The next assumption I made is that any number, not just integers, could be inputted for the x value and the convergence criteria. As such the inputs would need to be stored as floats, which in turn means the code would need to sanitize float type inputs. This is much more difficult as valid inputs now include decimal points, negatives, and "E" or "e" for scientific notation. These cannot exist anywhere in the input, however, they must follow specific patterns. Negatives, for example, can only exist at the start of the number; scientific notation must be followed by a positive or negative indicator which must be followed by a number. For the decimal point only one could exist and I made the assumption that the decimal could not be in the exponent. I wrote a function, called \textit{IsFloat} that accounts for all of these conditions and returns an error code if the criteria are not met. 
+
+I call the function after asking the user for x and use an \textit{if} statement to check for both an error code and an overflow error. I did not put the overflow check in the function because the size of the float may change (i.e. double or long double) for different programs and I wanted this function to be valid for multiple different programs. If the user entered a valid input that was both a float and not overflowing the variable the user is asked for the acceptable error and the input is sanitized as before. 
+
+Unfortunately I was unable to store any of the inputs as the type \textit{long double}, although not for lack of trying. For whatever reason my code would not recognize the declaration of my variables as \textit{long doubles}, interpreting them as type \textit{double} instead. Due to this the maximum size of my variables is significantly reduced. The exponential rate of increase of $e^x$ meant my code experienced an overflow error at an x value of around 63. The program works perfectly fine at any value below that, however.
+
+\end{document}

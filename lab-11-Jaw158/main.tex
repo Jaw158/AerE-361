@@ -1,0 +1,46 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Naive-Gauss elimination}
+Naive-Gauss elimination involves subtracting the elements of one row from another row until all of the lower elements are zero. In the worst case scenario every row would need to be subtracted by all rows above it. this would be 1 calculation for the second row, two for the third, up to n-1 calculations for the nth row. This is $\frac{n(n+1)}{2}$ calculations for the elimination step. The computer, however, is not as smart as a person. The computer has to actually run through 3 loops. The first loop identifies the row for that everything will be subtracted from. The second loop identifies the row that will be subtracted. The third loop identifies the individual elements of each row. This third loop adds another factor of n to the complexity, giving $\frac{n^3+n^2}{2}$ as the increase in run time with n.
+
+After elimination the equations have to be back-substituted. While the equations have to be substituted in a specific order (bottom up), each equation only has one calculation to do. More memory will need to be accessed with equations higher in the matrix, but this is not accounted for in complexity. Since there are n equations back-substitution has n calculations. Again the computer cannot do multiple calculations at once. As such two loops have to be used. The first loop identifies each row. The second loop performs the calculations for each element, with the number of calculations increasing by one for each higher row. This gives the same time complexity as the number of calculations for the elimination step, $\frac{n(n+1)}{2}$.
+
+To find the total time complexity we add the two run times. This gives a total run time of $\frac{n^3+2n^2+n}{2}$. This is a rather complex format for complexity, so we can simplify it by taking only the highest term. As such our big O complexity is $O(n^3)$, giving us a run time dependent on the cube of the number of equations.
+
+\section{Gauss-Jordan}
+The Guass-Jordan code provided was partially complete. To get it working I had to allocate a matrix and a dynamic variable as well as including the entire math portion. Allocating the matrix was doing using \textit{malloc} along with a \textit{for} loop to \textit{malloc} each element in the array. the dynamic variable, \textit{x}, was allocated using one instance of \textit{malloc}.
+
+There were two parts to the math portion, the one that diagonalized the matrix and the one that actually found the values of x. To diaganolize the matrix I used the equation
+\begin{equation}
+    A[i][k] = A[j][k] - \frac{A[j][j]*A[i][k]}{A[i][j]}
+\end{equation}
+This equation eliminated all the non-diagonal and non-answer elements in the matrix. The index \textit{i} determines which row is being manipulated. Index \textit{j} indicates the row used to manipulate. The index \textit{k} then moves along each element of the manipulated row. For the first iteration this equation multiplies the element by the first element of the first row and divides by the first element of the manipulated row. It then subtracts this product from the element from the first row and replaces the manipulated element by this difference. Running this process through every combination of manipulated row, base row, and element will give the diagaonalized matrix. The answers to this solution were then found by dividing the solution of the row by the element on the diagonal (the only non-zero one left).
+
+Various input and mathematical checks were also implemented. The first mathematical check I performed was to make sure the code did not divide by zero. This was avoided by switching an existing row with a row below it that did not have an offending zero. If no appropriate rows could be found then an error was reported for over-defining the equations. The other mathematical check implemented was if the element being subtracted was zero. If the element being manipulated was zero then the manipulation was skipped as the end goal was already accomplished. For error checking I copied in functions I had written for other codes. Input sanitization includes checking that the number of unknowns entered is an integer and that each element of the array is a float. With these modifications the code functions properly.
+
+Excluding loops for input checking and memory allocation, which have no constants, there are effectively three loops in this code. The first is really two loops used for inputting values into the matrix. The second loop is really three used to diagonalize the matrix. The last loop calculates the x value solutions and prints the result to the screen. There are no loop invariants in any of these loops. The time complexity for calculations is similar to that of Naive-Gauss Elimination. However one of the mathematical checks consists of two loops and is itself within two loops of the calculation portion. This results in a run time dependent on the fourth power of the number of equations, a big O complexity of $O(n^4)$.
+
+\section{Gauss-Seidel}
+This code accepted various inputs, stored them in a matrix, used the Gauss-Seidel method to approximate a solution, and store it based on the input. The input section was composed of three parts, flag checking, no file argument, and a file argument. The flag checking was based off of the password checks from lab 6. I used a \textit{strcmp} to check the available flags and a corresponding number to set the number of iterations or convergence tolerance. The input acceptance for no arguments (other than flags) required the user to enter numbers on the screen. First the number of equations was requested. This was used to allocate memory for a matrix as done in the Gauss-Jordan code. The user then had to input a value for each coefficient and the solutions in the system of equations. If a file argument was used the code read the file in the same was as done in lab 10.
+
+Input sanitization was also applied at this stage of the code. The iteration flag was checked for an integer input. An integer check was also applied to the number of equation input. Float checks were applied to the tolerance flag number and the element inputs, either from the screen or from a file. A file check was also applied to the csv argument. Each of these input checks were taken from other codes I have written.
+
+After reading the matrix data from the command window or file the data is stored in a sparse matrix. This is to save computational requirements. The procedure used to store the sparse matrix is identical to that provided in the Array code from the git repository.
+
+The Gauss-Seidel code was implemented using the equation provided to us in the Xu\_Gauss PDF.
+\begin{equation}
+    x_i^{(k)} = \frac{1}{a_{ii}}(-\sum_{j=1}^{i-1}(a_{ij}x_j^{(k)}) -\sum_{j=i+1}^{n}(a_{ij}x_j^{k-1})+b_i)
+\end{equation}
+This uses the most updated determinations of the solutions, x, to calculate a new x. A loop is used to run through each equation until the answers have either converged or the maximum number of iterations have passed. Since the Gauss-Seidel procedure has a tendency to diverge, I put in a notification that the series may not have converged if the maximum number of iterations is reached before the convergence tolerance.
+
+The last step is to output the result. If the user entered numbers in the command window I print the result to the screen. This is done using a for loop and printing the result of each x solution. If a file was used to provide the system of equations the output is stored in a new file. The procedure for this follows that used in lab 10. The only difference is that the outputs form one column, rather than a matrix. With the answer provided the code ends.
+
+There are effectively six loops in this code, ignoring input checks and memory allocation, which do not have any loop invariants anyways. There are three input loops. The first loop is for checking flags inputted to the command line. The loop constants here are the number of arguments, \textit{argc}, and the array of arguments, \textit{argv}. The second input loop is for inputting system of equation values from the command window. The third input loop reads matrix values from a file. Neither loops two nor three have any loop invariants. The fourth loop is an amalgamation of six loops used for mathematical calculations. There are no loop constants for this set of loops, other than the convergence tolerance and maximum iteration values. The last two loops are for printing the answers. The fifth loop prints the answers to the screen. The sixth loop prints the answers to a file. Both of these two loops share the same invariant: the answers array.
+
+The most nested set of loops, the one used for calculations, is three loops deep. The outermost loop is for tracking the iterations and does not change with the size of the input. The second loop is linearly dependent on the number of equations. The third loop, which is really two loops split apart (one for the unchanged values of x, the other for the changed x values), is also linearly dependent on the number of equations. As such the big O complexity is $O(n^2)$, giving a quadratic run time.
+
+\end{document}

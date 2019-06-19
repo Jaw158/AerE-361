@@ -1,0 +1,189 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+
+\begin{document}
+
+\section{Exercise 1}
+The process for solving this code was fairly straightforward: split the decimal number into integer and fraction portions and convert each of those into binary separately. When they have been successfully combined add the binary numbers back together and output the result. Since 10 digits are used for the fraction the minimum number is $\frac{1}{1024}$ = 0.000977. As a result of the output being all one value (and thus being stored in one \textit{long double} variable) the code only works for numbers smaller than 1024.
+
+We were given the procedure of how to convert decimal integers and fractions to binary in the lab document. The only trick was identifying how to store the resulting binary. Additionally some difficulty arose in maintaining accuracy in the final binary number. An accurate fraction and an accurate integer could be calculated, but adding the two numbers together gave an inaccurate result. This was resolved by using \textit{long double} variables and limiting the size of the numbers that could be converted to binary.
+
+There are two loops in the code. The first loop is for the integer conversion. The second loop converts decimal fractions to binary. There are no invariants in either loop. The number of times either loop has to be run is dependent upon the size of the inputs, but fewer loops have to be run as the inputs get larger. As such this code has logarithmic run time, or at least very close to it. This gives a complexity for O(logn).
+
+\section{Exercise 2}
+\begin{enumerate}
+    \item all answers given in binary notation
+    
+    \underline{unsigned}
+    \begin{itemize}
+        \item 8-bit
+        \begin{itemize}
+            \item min: 0000 0000
+            \item max: 1111 1111
+        \end{itemize}
+        \item 16-bit
+        \begin{itemize}
+            \item min: 0000 0000 0000 0000
+            \item max: 1111 1111 1111 1111
+        \end{itemize}
+        \item 32-bit
+        \begin{itemize}
+            \item min: 0000 0000 0000 0000 0000 0000 0000 0000
+            \item max: 1111 1111 1111 1111 1111 1111 1111 1111
+        \end{itemize}
+        \item 64-bit
+        \begin{itemize}
+            \item min: 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+            \item max: 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111
+        \end{itemize}
+    \end{itemize}
+    \underline{2's complement signed}
+    \begin{itemize}
+        \item 8-bit
+        \begin{itemize}
+            \item min: 1000 0000
+            \item max: 0111 1111
+        \end{itemize}
+        \item 16-bit
+        \begin{itemize}
+            \item min: 1000 0000 0000 0000
+            \item max: 0111 1111 1111 1111
+        \end{itemize}
+        \item 32-bit
+        \begin{itemize}
+            \item min: 1000 0000 0000 0000 0000 0000 0000 0000
+            \item max: 0111 1111 1111 1111 1111 1111 1111 1111
+        \end{itemize}
+        \item 64-bit
+        \begin{itemize}
+            \item min: 1000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000
+            \item max: 0111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111
+        \end{itemize}
+    \end{itemize}
+    \item 8-bit unsigned representation
+    \begin{itemize}
+        \item 88: 0101 1000
+        \item 0: 0000 0000
+        \item 1: 0000 0001
+        \item 127: 0111 1111
+        \item 255: 1111 1111
+    \end{itemize}
+    \item 2's compliment signed representation
+    \begin{itemize}
+        \item +88: 0101 1000
+        \item -88: 1010 1000
+        \item -1: 1111 1111
+        \item 0: 0000 0000
+        \item +1: 0000 0001
+        \item -128: 1000 0000
+        \item +127: 0111 1111
+    \end{itemize}
+    \item sign-magnitude signed representation
+    \begin{itemize}
+        \item +88: 0101 1000
+        \item -88: 1101 1000
+        \item -1: 1000 0001
+        \item 0: 0000 0000 or 1000 0000
+        \item +1: 0000 0001
+        \item -127: 1111 1111
+        \item +127: 0111 1111
+    \end{itemize}
+    \item 1's compliment signed representation
+    \begin{itemize}
+        \item +88: 0101 1000
+        \item -88: 1010 0111
+        \item -1: 1111 1110
+        \item 0: 0000 0000 or 1111 1111
+        \item +1: 0000 0001
+        \item -127: 1000 0000
+        \item +127: 0111 1111
+    \end{itemize}
+\end{enumerate}
+
+\section{Exercise 3}
+\begin{enumerate}
+    \item positive 32-bit normalized form
+    \begin{itemize}
+        \item largest: 0 1111 1110 111 1111 1111 1111 1111 1111 = $3.4028*10^{38}$
+        \item smallest: 0 0000 0001 000 0000 0000 0000 0000 0000 =  $1.1755*10^{-38}$
+    \end{itemize}
+    \item negative 32-bit normalized form
+    \begin{itemize}
+        \item largest: 1 1111 1110 111 1111 1111 1111 1111 1111 = $-3.4028*10^{38}$
+        \item smallest: 1 0000 0001 000 0000 0000 0000 0000 0000 =  $-1.1755*10^{-38}$
+    \end{itemize}
+    \item positive 32-bit denormalized form
+    \begin{itemize}
+        \item largest: 0 0000 0000 111 1111 1111 1111 1111 1111 = $1.1755*10^{-38}$
+        \item smallest: 0 0000 0000 000 0000 0000 0000 0000 0001 = $1.4013*10^{-45}$
+    \end{itemize}
+    \item negative 32-bit denormalized form
+    \begin{itemize}
+        \item largest: 1 0000 0000 111 1111 1111 1111 1111 1111 = $-1.1755*10^{-38}$
+        \item smallest: 1 0000 0000 000 0000 0000 0000 0000 0001 = $-1.4013*10^{-45}$
+    \end{itemize}
+\end{enumerate}
+
+\section{Exercise 4}
+\begin{enumerate}
+    \item positive 64-bit normalized form
+    \begin{itemize}
+        \item largest: 0 1111 1111 110 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 = $1.7977*10^{308}$
+        \item smallest: 0 0000 0000 001 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 = $2.2251*10^{-308}$
+    \end{itemize}
+    \item negative 64-bit normalized form
+    \begin{itemize}
+        \item largest: 1 1111 1111 110 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 = $-1.7977*10^{308}$
+        \item smallest: 1 0000 0000 001 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 =  $-2.2251*10^{-308}$
+    \end{itemize}
+    \item positive 64-bit denormalized form
+    \begin{itemize}
+        \item largest: 0 0000 0000 000 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 = $2.2251*10^{-308}$
+        \item smallest: 0 0000 0000 000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0001 =  $4.9407*10^{-324}$
+    \end{itemize}
+    \item negative 64-bit denormalized form
+    \begin{itemize}
+        \item largest: 1 0000 0000 000 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 1111 = $-2.2251*10^{-308}$
+        \item smallest: 1 0000 0000 000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0000 0001 = $-4.9407*10^{-324}$ 
+    \end{itemize}
+\end{enumerate}
+
+\section{Exercise 5}
+This code was similar to the one I wrote for exercise 1, but more advanced. The same general technique exists, although now I had an exponent part in place of the integer. I figured out I had to bring the input value between 1 and 2. Then I subtracted one from the result and converted the fraction to binary as the mantissa. If the input was below the minimum value allowed in normalized form I set the exponent equal to 0, brought the value between 0 and 2, and calculated the mantissa, leaving the 1.
+
+I also included a portion to check for overflow and underflow, which were based on the maximum and minimum values the exponent could take. Since the size of the exponent could change these values could exceed those that could be stored in any variable. In that case there was effectively underflow or overflow. I did include a portion to filter out unexpected invalid results.
+
+Declaring the size of the exponent and mantissa was based on an input from the user. The user would declare the exponent size which would determine the mantissa size. These would then determine the size of the exponent and mantissa arrays used to store the binary results.
+
+There are eight loops in this code. The first brings the input between 1 and 2 if it is less than 1. The second brings the input between 1 and 2 if it is greater than 2. Both loops keep track of the exponent size required to bring the value between 1 and 2. They also have no invariants. The third loop converts the decimal exponent to binary and stores the values in an array. The one invariant here is the variable indicating the number of bits comprising the exponent. The fourth loop converts the mantissa to binary and stores the values in an array; it has no loop invariants. loop five is similar to loop one, although it brings the input value to between 0 and 2. The sixth loop coverts the mantissa to binary and stores it for denomarilized floats. Neither loops five nor six have any invariants. Loops seven and eight output the exponent and mantissa to the display screen, respectively. Neither loop has any invariants.
+
+The number of times any individual loop runs may change, but the total number of loops processed in this program is constant. This is because the number of times a loop runs for the exponent plus the number of runs used for the mantissa will always sums to 31 (since the mantissa and exponent comprise 31 bits). The exception to this is is loop five which runs at a rate proportional to the exponent of the number of bits stored in the exponent. Loops one and two are also dependent on the size of the input, but like their exercise 1 counterparts have a logarithmic complexity. This code thus has an exonential run time and complexity O($2^n$).
+
+\section{Exercise 6}
+This code involved the careful implementation of a large number of if statements. First I sanitized the inputs and determined the absolute value of the coefficients. I then used these to determine which coefficient had the largest magnitude and used that to normalize the other coefficients. Which coefficient was used to normalize the others would determine how the discriminant was calculated. I accounted for this to minimize precision loss in the discriminant.
+
+The next portion depended on whether or not there were imaginary roots. If the discriminant was negative I calculated the real and imaginary portions of the root separately. I then printed the result. If the discriminant was positive I calculated the roots based on the sign of \textit{b}. I arranged it such that the square root of the discriminant plus \textit{b} always increased in magnitude. One root was calculated using the standard form
+\begin{equation}
+    x=\frac{-b \pm \sqrt{b^2-4ac}}{2a}
+\end{equation}
+the other using the alternate form
+\begin{equation}
+    x=\frac{2c}{-b \mp \sqrt{b^2-4ac}}
+\end{equation}
+Both roots were then outputted.
+
+This code has no loops and thus has a constant run time with complexity O(1).
+
+\section{Exercise 7}
+The mathematical portion of this code was very straightforward. However my results would not approach six. They would start to approach six, and at single precision it looks like it would work. However beyond value 13 the results begin increasing rapidly, tending towards 100. I rearranged the difference equation in attempt to maximize precision. I also checked the sequence on my calculator to make sure my code was not in error, but in I got the same result. This appears to be a result of rounding errors. Rounding up causes a slight error that eventually allows value 14 to exceed six. When this happens
+\begin{equation}
+    \frac{1130-\frac{3000}{x_{k-1}}}{x_k}
+\end{equation}
+becomes excessively small, allowing the subsequent $x_{k+1}$ values to increase at a rapid rate. The equation begins to level off again near 100.
+
+I had to learn how to invoke a flag for this code. It turned out not to be difficult. I used the command line storage learned several labs ago and the \textit{strcmp} function used in lab 6. I just checked that the command line argument mathced \textit{-d} and then changed the number of loops from 10 to 20.
+
+This code has one loop with mo invariants. For the most part this code runs a constant number of loops. The only thing that can change this is the \textit{-d} flag. If the flag is used the run time doubles. Despite this I would say this code has a constant run time, with complexity O(1).
+
+\end{document}}
